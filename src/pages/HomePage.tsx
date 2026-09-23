@@ -112,6 +112,7 @@ function Portfolio({ data }: { data: PortfolioData }) {
           resumeUrl={data.resumeUrl}
           currentRole={current?.role ?? roles[0] ?? ''}
           stack={(current?.technologies ?? []).slice(0, 4)}
+          photoUrl={profile.avatar_path ? publicUrl('media', profile.avatar_path) : null}
         />
         <Stats stats={data.stats} />
         <About

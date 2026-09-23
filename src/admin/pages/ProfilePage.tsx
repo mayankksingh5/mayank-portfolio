@@ -53,7 +53,14 @@ const fields: FieldConfig[] = [
     type: 'tags',
     hint: 'Shown in the About section. Press Enter after each one.',
   },
-  { name: 'avatar_path', label: 'Profile photo', type: 'image', folder: 'profile', aspect: 'square' },
+  {
+    name: 'avatar_path',
+    label: 'Profile photo',
+    type: 'image',
+    folder: 'profile',
+    aspect: 'square',
+    hint: 'Shown large at the top of the portfolio. A portrait (taller than wide) photo looks best.',
+  },
   {
     name: 'is_open_to_work',
     label: 'Show "Open to Opportunities" badge',
