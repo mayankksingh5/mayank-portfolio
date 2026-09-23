@@ -1,6 +1,8 @@
 import { supabase } from '@/lib/supabase'
-import { deleteFiles, publicUrl, uploadFile } from '@/services/storage'
+import { deleteFiles, uploadFile } from '@/services/storage'
 import type { Profile, SiteSettings } from '@/types/database'
+
+export { resumeDownloadUrl } from '@/lib/storageUrl'
 
 type ProfileUpdate = Partial<Omit<Profile, 'id' | 'created_at' | 'updated_at'>>
 type SettingsUpdate = Partial<Omit<SiteSettings, 'id' | 'created_at' | 'updated_at'>>
@@ -25,14 +27,6 @@ export async function fetchSiteSettings() {
 export async function updateSiteSettings(values: SettingsUpdate) {
   const { error } = await supabase.from('site_settings').update(values).eq('id', 1)
   if (error) throw error
-}
-
-/** Public URL that downloads the resume with its original file name. */
-export function resumeDownloadUrl(settings: Pick<SiteSettings, 'resume_path' | 'resume_file_name'>) {
-  if (!settings.resume_path) return null
-  const url = new URL(publicUrl('resumes', settings.resume_path))
-  url.searchParams.set('download', settings.resume_file_name ?? 'resume.pdf')
-  return url.toString()
 }
 
 /**

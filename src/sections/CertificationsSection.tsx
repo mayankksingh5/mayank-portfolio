@@ -2,7 +2,7 @@ import { ExternalLinkIcon } from '@/components/icons'
 import { RevealSection } from '@/components/RevealSection'
 import { SectionHeading } from '@/components/SectionHeading'
 import { formatMonthYear } from '@/lib/format'
-import { publicUrl } from '@/services/storage'
+import { publicUrl } from '@/lib/storageUrl'
 import type { Certification } from '@/types/database'
 
 const ACCENTS = ['#06b6d4', '#f97316', '#8b5cf6', '#3b82f6', '#10b981']

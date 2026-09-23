@@ -1,11 +1,11 @@
-import { supabase } from '@/lib/supabase'
+import { publicDb } from '@/lib/publicDb'
+import { resumeDownloadUrl } from '@/lib/storageUrl'
 import {
   PROJECT_WITH_TECHNOLOGIES_SELECT,
   withTechnologyNames,
   type ProjectQueryRow,
   type ProjectWithTechnologies,
-} from '@/services/projects'
-import { resumeDownloadUrl } from '@/services/siteContent'
+} from '@/services/projectShape'
 import type {
   Achievement,
   Certification,
@@ -59,21 +59,21 @@ export async function fetchPortfolio(): Promise<PortfolioData> {
     achievements,
     socialLinks,
   ] = await Promise.all([
-    supabase.from('profile').select('*').eq('id', 1).single(),
-    supabase.from('site_settings').select('*').eq('id', 1).single(),
-    supabase.from('stats').select('*').eq('is_published', true).order('display_order'),
-    supabase.from('experiences').select('*').eq('is_published', true).order('display_order'),
-    supabase
+    publicDb.from('profile').select('*').eq('id', 1).single(),
+    publicDb.from('site_settings').select('*').eq('id', 1).single(),
+    publicDb.from('stats').select('*').eq('is_published', true).order('display_order'),
+    publicDb.from('experiences').select('*').eq('is_published', true).order('display_order'),
+    publicDb
       .from('projects')
       .select(PROJECT_WITH_TECHNOLOGIES_SELECT)
       .eq('is_published', true)
       .order('display_order'),
-    supabase.from('skill_categories').select('*').eq('is_published', true).order('display_order'),
-    supabase.from('skills').select('*').eq('is_published', true).order('display_order'),
-    supabase.from('education').select('*').eq('is_published', true).order('display_order'),
-    supabase.from('certifications').select('*').eq('is_published', true).order('display_order'),
-    supabase.from('achievements').select('*').eq('is_published', true).order('display_order'),
-    supabase.from('social_links').select('*').eq('is_published', true).order('display_order'),
+    publicDb.from('skill_categories').select('*').eq('is_published', true).order('display_order'),
+    publicDb.from('skills').select('*').eq('is_published', true).order('display_order'),
+    publicDb.from('education').select('*').eq('is_published', true).order('display_order'),
+    publicDb.from('certifications').select('*').eq('is_published', true).order('display_order'),
+    publicDb.from('achievements').select('*').eq('is_published', true).order('display_order'),
+    publicDb.from('social_links').select('*').eq('is_published', true).order('display_order'),
   ])
 
   const settingsRow = unwrap(settings)

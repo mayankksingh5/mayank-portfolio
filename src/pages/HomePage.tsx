@@ -1,9 +1,10 @@
 import { useMemo } from 'react'
+import { PersonSchema } from '@/components/PersonSchema'
 import { useActiveSection } from '@/hooks/useActiveSection'
 import { useAsyncData } from '@/hooks/useAsyncData'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
 import { fetchPortfolio, type PortfolioData } from '@/services/portfolio'
-import { publicUrl } from '@/services/storage'
+import { publicUrl } from '@/lib/storageUrl'
 import { About } from '@/sections/About'
 import { AchievementsSection } from '@/sections/AchievementsSection'
 import { CertificationsSection } from '@/sections/CertificationsSection'
@@ -86,6 +87,7 @@ function Portfolio({ data }: { data: PortfolioData }) {
 
   return (
     <>
+      <PersonSchema data={data} jobTitle={current?.is_current ? current.role : (roles[0] ?? '')} />
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-ink"
@@ -109,7 +111,7 @@ function Portfolio({ data }: { data: PortfolioData }) {
           socialLinks={data.socialLinks}
           resumeUrl={data.resumeUrl}
           currentRole={current?.role ?? roles[0] ?? ''}
-          stack={(current?.technologies ?? []).slice(0, 5)}
+          stack={(current?.technologies ?? []).slice(0, 4)}
         />
         <Stats stats={data.stats} />
         <About

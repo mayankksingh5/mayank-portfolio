@@ -3,8 +3,8 @@ import { ExternalLinkIcon, GithubIcon } from '@/components/icons'
 import { RevealSection } from '@/components/RevealSection'
 import { SectionHeading } from '@/components/SectionHeading'
 import { TagList } from '@/components/Tag'
-import type { ProjectWithTechnologies } from '@/services/projects'
-import { publicUrl } from '@/services/storage'
+import type { ProjectWithTechnologies } from '@/services/projectShape'
+import { publicUrl } from '@/lib/storageUrl'
 
 const projectNumber = (index: number) => `Project ${String(index + 1).padStart(2, '0')}`
 

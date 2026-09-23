@@ -2,15 +2,16 @@
 
 /* Design tokens from the Figma Make design (dark, blue/cyan accent). */
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Outfit Variable', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
 
   --color-ink: #0a0b0f;
   --color-panel: #111318;
   --color-fg: #e8eaf0;
   --color-fg-muted: #9ca3af;
-  --color-fg-subtle: #6b7280;
+  /* Design used #6b7280; lightened slightly to meet WCAG AA contrast (4.5:1). */
+  --color-fg-subtle: #7b8290;
   --color-fg-faint: #4b5563;
   --color-fg-dim: #374151;
   --color-brand: #3b82f6;

@@ -1,28 +1,16 @@
 import { supabase } from '@/lib/supabase'
 import { createCollectionService, type CollectionService, type Payload } from '@/services/collection'
+import {
+  PROJECT_WITH_TECHNOLOGIES_SELECT,
+  withTechnologyNames,
+  type ProjectQueryRow,
+  type ProjectWithTechnologies,
+} from '@/services/projectShape'
 import type { Project } from '@/types/database'
 
-export type ProjectWithTechnologies = Project & { technologies: string[] }
+export type { ProjectWithTechnologies }
 
 const base = createCollectionService<Project>('projects', { imageColumns: ['thumbnail_path'] })
-
-/** Select that embeds each project's technology names in order. */
-export const PROJECT_WITH_TECHNOLOGIES_SELECT = '*, project_technologies(display_order, technologies(name))'
-
-export type ProjectQueryRow = Project & {
-  project_technologies: { display_order: number; technologies: { name: string } | null }[]
-}
-
-export function withTechnologyNames(row: ProjectQueryRow): ProjectWithTechnologies {
-  const { project_technologies, ...project } = row
-  return {
-    ...project,
-    technologies: [...project_technologies]
-      .sort((a, b) => a.display_order - b.display_order)
-      .map((link) => link.technologies?.name)
-      .filter((name): name is string => Boolean(name)),
-  }
-}
 
 export async function listTechnologyNames() {
   const { data, error } = await supabase.from('technologies').select('name').order('name')

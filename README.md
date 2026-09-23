@@ -1,29 +1,40 @@
 # mayank-portfolio
 
 Personal portfolio website of Mayank Kumar Singh, with a private admin panel
-for managing content.
+for managing all content without touching code.
 
-## Stack
-
-- React + Vite + TypeScript
-- Tailwind CSS
-- React Router
-- Supabase (Postgres, Auth, Storage) with Row Level Security
-- Deployed on Cloudflare Pages (static build)
+- **Public site** (`/`): data-driven sections built from the Figma design.
+- **Admin panel** (`/admin`): sign-in protected CRUD for every section,
+  image uploads, resume uploads and contact form messages.
 
 This project uses its own Supabase project, environment variables and
 deployment. It shares no configuration with any other project.
+
+## Stack
+
+- React 19, Vite, TypeScript, Tailwind CSS v4, React Router
+- Supabase: Postgres, Auth, Storage, with Row Level Security
+- Static build deployed to Cloudflare Pages
+
+The public page uses a lightweight PostgREST client; the full `supabase-js`
+bundle (auth, uploads) is only loaded by the admin panel.
 
 ## Local setup
 
 ```bash
 npm install
-cp .env.example .env.local   # then fill in your portfolio Supabase values
-npm run dev
+cp .env.example .env.local   # then fill in the values
+npm run dev                  # http://localhost:5173
 ```
 
-Only the public anon key goes in `.env.local`. Never put the Supabase
-service-role key in any `VITE_` variable.
+| Variable | Required | Description |
+| --- | --- | --- |
+| `VITE_SUPABASE_URL` | yes | Project URL, e.g. `https://<ref>.supabase.co` (no `/rest/v1`) |
+| `VITE_SUPABASE_ANON_KEY` | yes | Publishable (or legacy anon) key |
+| `VITE_SITE_URL` | for production | Public site URL, e.g. `https://example.com`. Enables `sitemap.xml`, canonical URL and link-preview image tags |
+
+Never put the Supabase **secret / service-role** key in any `VITE_` variable:
+those values are bundled into the browser.
 
 ## Scripts
 
@@ -31,31 +42,64 @@ service-role key in any `VITE_` variable.
 | --- | --- |
 | `npm run dev` | Start the dev server |
 | `npm run build` | Type-check and build to `dist/` |
-| `npm run preview` | Preview the production build |
+| `npm run preview` | Serve the production build locally |
 | `npm run lint` | Lint with oxlint |
+
+## Supabase setup (new project)
+
+1. Create a Supabase project for this portfolio.
+2. Run the migrations in order in the SQL editor (or with the Supabase CLI):
+   1. `supabase/migrations/20260923000001_schema.sql` – tables, RLS
+   2. `supabase/migrations/20260923000002_storage.sql` – `media` and `resumes` buckets
+   3. `supabase/migrations/20260923000003_design_fields.sql` – stats, contact messages, design fields
+3. Optional: run `supabase/seed/initial_content.sql` once for starter content.
+4. **Authentication → Users → Add user**: create the admin account.
+5. Run `supabase/admin/grant_admin.sql` with that email to grant admin access.
+6. **Authentication → Sign In / Providers**: turn off "Allow new users to sign up".
+
+### Security model
+
+- Visitors can only read rows where `is_published = true`.
+- Visitors can insert contact messages but never read them.
+- Create, update and delete require the signed-in user to be in
+  `public.admin_users` (checked by `public.is_admin()` in every policy).
+- Storage buckets are publicly readable; only admins can upload or delete.
 
 ## Project structure
 
 ```
 src/
-  admin/       Admin panel (lazy-loaded, requires login)
-  components/  Reusable UI components
-  sections/    Public page sections (Hero, About, Projects, ...)
+  admin/       Admin panel (lazy-loaded): auth, layout, forms, pages
+  components/  Shared public UI (icons, headings, tags, buttons)
+  sections/    Public page sections (Hero, Experience, Projects, ...)
   pages/       Route-level pages
   hooks/       React hooks
-  lib/         Supabase client, env validation, helpers
-  services/    Data access functions (Supabase queries)
-  types/       Shared TypeScript types
-public/        Static files, including Cloudflare _headers and _redirects
+  lib/         Clients, env validation, formatting helpers
+  services/    Data access (public and admin)
+  types/       Database types
+public/        Static files, Cloudflare _headers/_redirects, og-image.png
 supabase/
-  migrations/  Database schema, RLS policies and storage setup
+  migrations/  Schema, RLS policies and storage setup
+  seed/        Optional starter content
+  admin/       Script to grant admin access
+seo-plugin.ts  Build-time robots.txt, sitemap.xml and canonical/OG tags
 ```
 
 ## Deployment (Cloudflare Pages)
 
-- Build command: `npm run build`
-- Output directory: `dist`
-- Environment variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**
+   and pick the `mayank-portfolio` repository.
+2. Build settings:
+   - Framework preset: **None** (or Vite)
+   - Build command: `npm run build`
+   - Build output directory: `dist`
+3. Environment variables (Production and Preview):
+   `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_SITE_URL`.
+   Node version is read from `.node-version` (22).
+4. Deploy. After adding a custom domain, set `VITE_SITE_URL` to it and redeploy
+   so the sitemap and preview tags use the right URL.
+5. In Supabase **Authentication → URL Configuration**, set the Site URL to the
+   deployed domain.
 
-`public/_redirects` handles client-side routing and `public/_headers` sets
-security and caching headers.
+`public/_redirects` sends all routes to the SPA, and `public/_headers` sets
+security headers (CSP, frame blocking) and long-term caching for hashed assets.

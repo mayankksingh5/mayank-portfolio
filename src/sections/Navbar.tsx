@@ -37,7 +37,12 @@ export function Navbar({
       }`}
     >
       <nav aria-label="Main" className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <a href="#home" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
+        <a
+          href="#home"
+          aria-label={`${shortName}, back to top`}
+          className="group flex items-center gap-2"
+          onClick={() => setMenuOpen(false)}
+        >
           <span
             aria-hidden="true"
             className="flex size-9 items-center justify-center rounded-lg bg-brand-gradient font-display text-sm font-bold text-white transition-transform duration-200 group-hover:scale-105"

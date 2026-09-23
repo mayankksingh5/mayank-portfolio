@@ -1,6 +1,6 @@
 import { RevealSection } from '@/components/RevealSection'
 import { SectionHeading } from '@/components/SectionHeading'
-import { publicUrl } from '@/services/storage'
+import { publicUrl } from '@/lib/storageUrl'
 import type { Profile } from '@/types/database'
 
 export function About({

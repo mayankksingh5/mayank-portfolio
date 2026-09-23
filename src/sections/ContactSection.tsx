@@ -3,7 +3,7 @@ import { externalLinkProps, primaryButton, secondaryButton } from '@/components/
 import { CheckIcon, DownloadIcon, EmailIcon, SendIcon, SocialIcon } from '@/components/icons'
 import { useReveal } from '@/hooks/useReveal'
 import { displayUrl } from '@/lib/format'
-import { sendContactMessage } from '@/services/messages'
+import { sendContactMessage } from '@/services/contact'
 import type { SocialLink } from '@/types/database'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
