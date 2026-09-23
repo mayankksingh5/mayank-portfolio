@@ -1,6 +1,5 @@
 import type { ComponentType } from 'react'
 import { createBrowserRouter } from 'react-router'
-import { ADMIN_SECTIONS } from '@/admin/navigation'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
@@ -9,7 +8,18 @@ const lazyPage = (load: () => Promise<{ default: ComponentType }>) => async () =
   Component: (await load()).default,
 })
 
-const sectionPlaceholder = lazyPage(() => import('@/admin/pages/SectionPlaceholderPage'))
+const adminPages = {
+  profile: () => import('@/admin/pages/ProfilePage'),
+  experience: () => import('@/admin/pages/ExperiencePage'),
+  projects: () => import('@/admin/pages/ProjectsPage'),
+  skills: () => import('@/admin/pages/SkillsPage'),
+  education: () => import('@/admin/pages/EducationPage'),
+  certifications: () => import('@/admin/pages/CertificationsPage'),
+  achievements: () => import('@/admin/pages/AchievementsPage'),
+  resume: () => import('@/admin/pages/ResumePage'),
+  'social-links': () => import('@/admin/pages/SocialLinksPage'),
+  settings: () => import('@/admin/pages/SettingsPage'),
+}
 
 export const router = createBrowserRouter([
   {
@@ -31,10 +41,7 @@ export const router = createBrowserRouter([
             index: true,
             lazy: lazyPage(() => import('@/admin/pages/DashboardPage')),
           },
-          ...ADMIN_SECTIONS.filter((section) => section.path !== '').map((section) => ({
-            path: section.path,
-            lazy: sectionPlaceholder,
-          })),
+          ...Object.entries(adminPages).map(([path, load]) => ({ path, lazy: lazyPage(load) })),
           { path: '*', Component: NotFoundPage },
         ],
       },
