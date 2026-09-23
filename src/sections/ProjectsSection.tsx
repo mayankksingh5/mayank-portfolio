@@ -70,31 +70,60 @@ export function ProjectsSection({ projects }: { projects: ProjectWithTechnologie
 function FeaturedProject({ project, index }: { project: ProjectWithTechnologies; index: number }) {
   const domain = hostname(project.live_url) ?? `${project.slug}`
 
+  const mockup = (
+    <>
+      <div className="flex items-center gap-2 border-b border-white/6 bg-white/2 px-4 py-3">
+        <span aria-hidden="true" className="size-2.5 rounded-full bg-red-500/50" />
+        <span aria-hidden="true" className="size-2.5 rounded-full bg-yellow-500/50" />
+        <span aria-hidden="true" className="size-2.5 rounded-full bg-green-500/50" />
+        <span className="mx-4 flex min-w-0 flex-1 items-center justify-between gap-2 rounded bg-white/5 px-3 py-1 text-xs text-fg-subtle transition-colors group-hover/site:bg-white/8 group-hover/site:text-fg">
+          <span className="truncate">{domain}</span>
+          {project.live_url && <ExternalLinkIcon size={12} className="shrink-0" />}
+        </span>
+      </div>
+      <div className="relative flex flex-1 flex-col">
+        {project.thumbnail_path ? (
+          <img
+            src={publicUrl('media', project.thumbnail_path)}
+            alt={`Screenshot of ${project.title}`}
+            loading="lazy"
+            decoding="async"
+            className="aspect-video w-full flex-1 object-cover object-top"
+          />
+        ) : (
+          <ProjectPreview title={project.title} />
+        )}
+        {project.live_url && (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-4 mx-auto flex w-fit translate-y-2 items-center gap-1.5 rounded-full border border-white/10 bg-ink/80 px-3 py-1.5 text-xs font-medium text-fg opacity-0 backdrop-blur transition-all duration-300 group-hover/site:translate-y-0 group-hover/site:opacity-100 group-focus-visible/site:translate-y-0 group-focus-visible/site:opacity-100"
+          >
+            Visit site <ExternalLinkIcon size={12} />
+          </span>
+        )}
+      </div>
+    </>
+  )
+
+  const mockupClass = 'flex min-h-64 flex-col border-white/6 bg-white/3 lg:border-r'
+
   return (
     <article className="glass group overflow-hidden rounded-2xl border-brand/20! transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
       <div className="grid lg:grid-cols-2">
-        {/* Browser mockup */}
-        <div className="flex min-h-64 flex-col border-white/6 bg-white/3 lg:border-r">
-          <div aria-hidden="true" className="flex items-center gap-2 border-b border-white/6 bg-white/2 px-4 py-3">
-            <span className="size-2.5 rounded-full bg-red-500/50" />
-            <span className="size-2.5 rounded-full bg-yellow-500/50" />
-            <span className="size-2.5 rounded-full bg-green-500/50" />
-            <span className="mx-4 flex-1 truncate rounded bg-white/5 px-3 py-1 text-xs text-fg-subtle">
-              {domain}
-            </span>
-          </div>
-          {project.thumbnail_path ? (
-            <img
-              src={publicUrl('media', project.thumbnail_path)}
-              alt={`Screenshot of ${project.title}`}
-              loading="lazy"
-              decoding="async"
-              className="aspect-video w-full flex-1 object-cover object-top"
-            />
-          ) : (
-            <ProjectPreview title={project.title} />
-          )}
-        </div>
+        {/* Browser mockup; opens the live site when a URL is set */}
+        {project.live_url ? (
+          <a
+            href={project.live_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Visit ${project.title} website (${domain})`}
+            className={`group/site ${mockupClass}`}
+          >
+            {mockup}
+          </a>
+        ) : (
+          <div className={mockupClass}>{mockup}</div>
+        )}
 
         <div className="flex flex-col justify-between p-8">
           <div>

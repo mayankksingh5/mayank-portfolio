@@ -1,5 +1,5 @@
 import { publicDb } from '@/lib/publicDb'
-import { resumeDownloadUrl } from '@/lib/storageUrl'
+import { resumeDownloadUrl, resumeViewUrl } from '@/lib/storageUrl'
 import {
   PROJECT_WITH_TECHNOLOGIES_SELECT,
   withTechnologyNames,
@@ -25,6 +25,7 @@ export type PortfolioData = {
   profile: Profile
   settings: SiteSettings
   resumeUrl: string | null
+  resumeViewUrl: string | null
   stats: Stat[]
   experiences: Experience[]
   projects: ProjectWithTechnologies[]
@@ -83,6 +84,7 @@ export async function fetchPortfolio(): Promise<PortfolioData> {
     profile: unwrap(profile),
     settings: settingsRow,
     resumeUrl: resumeDownloadUrl(settingsRow),
+    resumeViewUrl: resumeViewUrl(settingsRow),
     stats: unwrap(stats),
     experiences: unwrap(experiences),
     projects: (unwrap(projects) as unknown as ProjectQueryRow[]).map(withTechnologyNames),

@@ -15,6 +15,7 @@ import { Footer } from '@/sections/Footer'
 import { Hero } from '@/sections/Hero'
 import { Navbar, type NavLink } from '@/sections/Navbar'
 import { ProjectsSection } from '@/sections/ProjectsSection'
+import { ResumeSection } from '@/sections/ResumeSection'
 import { SkillsSection } from '@/sections/SkillsSection'
 import { Stats } from '@/sections/Stats'
 import { WorkflowSection } from '@/sections/WorkflowSection'
@@ -60,10 +61,11 @@ function Portfolio({ data }: { data: PortfolioData }) {
       { id: 'projects', label: 'Projects', show: projects.length > 0 },
       { id: 'skills', label: 'Skills', show: skillGroups.length > 0 },
       { id: 'education', label: 'Education', show: education.length > 0 },
+      { id: 'resume', label: 'Resume', show: Boolean(data.resumeUrl) },
       { id: 'contact', label: 'Contact', show: true },
     ]
     return links.filter((link) => link.show).map(({ id, label }) => ({ id, label }))
-  }, [experiences.length, projects.length, skillGroups.length, education.length])
+  }, [experiences.length, projects.length, skillGroups.length, education.length, data.resumeUrl])
 
   const activeId = useActiveSection(navLinks.map((link) => link.id))
 
@@ -127,6 +129,14 @@ function Portfolio({ data }: { data: PortfolioData }) {
         <CertificationsSection certifications={data.certifications} />
         <AchievementsSection achievements={data.achievements} />
         <EducationSection education={education} />
+        <ResumeSection
+          name={profile.full_name}
+          downloadUrl={data.resumeUrl}
+          viewUrl={data.resumeViewUrl}
+          fileName={settings.resume_file_name}
+          updatedAt={settings.resume_updated_at}
+          highlights={skillGroups.map((group) => group.category.name)}
+        />
         <ContactSection email={profile.contact_email} phone={profile.contact_phone} socialLinks={data.socialLinks} resumeUrl={data.resumeUrl} />
       </main>
       <Footer

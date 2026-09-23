@@ -9,6 +9,11 @@ export function publicUrl(bucket: Bucket, path: string) {
   return `${env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucket}/${encodedPath}`
 }
 
+/** Public URL that opens the resume PDF in the browser. */
+export function resumeViewUrl(settings: Pick<SiteSettings, 'resume_path'>) {
+  return settings.resume_path ? publicUrl('resumes', settings.resume_path) : null
+}
+
 /** Public URL that downloads the resume with its original file name. */
 export function resumeDownloadUrl(settings: Pick<SiteSettings, 'resume_path' | 'resume_file_name'>) {
   if (!settings.resume_path) return null
