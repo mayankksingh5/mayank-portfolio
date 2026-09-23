@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens are placeholders until the Figma design is provided.
+ * Replace these values with the Figma variables in the UI phase.
+ */
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
