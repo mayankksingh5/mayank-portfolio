@@ -14,7 +14,7 @@ deployment. It shares no configuration with any other project.
 
 - React 19, Vite, TypeScript, Tailwind CSS v4, React Router
 - Supabase: Postgres, Auth, Storage, with Row Level Security
-- Static build deployed to Cloudflare Pages
+- Static build deployed to Cloudflare Workers (static assets)
 
 The public page uses a lightweight PostgREST client; the full `supabase-js`
 bundle (auth, uploads) is only loaded by the admin panel.
@@ -77,29 +77,39 @@ src/
   lib/         Clients, env validation, formatting helpers
   services/    Data access (public and admin)
   types/       Database types
-public/        Static files, Cloudflare _headers/_redirects, og-image.png
+public/        Static files, Cloudflare _headers, og-image.png
 supabase/
   migrations/  Schema, RLS policies and storage setup
   seed/        Optional starter content
   admin/       Script to grant admin access
 seo-plugin.ts  Build-time robots.txt, sitemap.xml and canonical/OG tags
+wrangler.jsonc Cloudflare deployment config
 ```
 
-## Deployment (Cloudflare Pages)
+## Deployment (Cloudflare Workers, static assets)
 
-1. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git**
-   and pick the `mayank-portfolio` repository.
-2. Build settings:
-   - Framework preset: **None** (or Vite)
+`wrangler.jsonc` serves the built `dist/` folder as static assets with
+single-page-app fallback (so `/admin` and other client routes work). No
+server code runs.
+
+1. Cloudflare dashboard → **Workers & Pages → Create → Import a repository**
+   and pick `mayank-portfolio` (grant the GitHub app access to this repository only).
+2. Settings:
    - Build command: `npm run build`
-   - Build output directory: `dist`
-3. Environment variables (Production and Preview):
-   `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_SITE_URL`.
+   - Deploy command: `npx wrangler deploy`
+3. **Advanced settings → Build variables** (Vite reads these at build time):
+   `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and later `VITE_SITE_URL`.
    Node version is read from `.node-version` (22).
-4. Deploy. After adding a custom domain, set `VITE_SITE_URL` to it and redeploy
-   so the sitemap and preview tags use the right URL.
+4. Deploy. Once the final URL (`*.workers.dev` or a custom domain) is known,
+   set `VITE_SITE_URL` to it and redeploy so the sitemap and preview tags use it.
 5. In Supabase **Authentication → URL Configuration**, set the Site URL to the
-   deployed domain.
+   deployed URL.
 
-`public/_redirects` sends all routes to the SPA, and `public/_headers` sets
-security headers (CSP, frame blocking) and long-term caching for hashed assets.
+Every push to `main` redeploys automatically. Content edited in the admin
+panel shows up immediately without a redeploy.
+
+`public/_headers` sets security headers (CSP, frame blocking), `noindex` for
+`/admin`, and long-term caching for hashed assets.
+
+To test the production build locally in the Cloudflare runtime:
+`npm run build && npx wrangler dev`.

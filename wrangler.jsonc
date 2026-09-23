@@ -1,0 +1,13 @@
+// Cloudflare Workers static-assets deployment (no server code).
+// `npm run build` produces dist/, which is served as-is; unknown paths fall
+// back to index.html so client-side routes like /admin work.
+// public/_headers (security + caching headers) is applied from dist/.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mayank-portfolio",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
+  }
+}
