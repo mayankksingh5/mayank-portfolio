@@ -70,7 +70,7 @@ export function Hero({
             <p className="mb-3 font-mono text-sm text-fg-subtle">Hello, I&apos;m</p>
             <h1
               id="hero-heading"
-              className="text-gradient mb-4 font-display text-[clamp(2.4rem,5vw,4rem)] leading-none font-bold tracking-tight"
+              className="text-gradient mb-4 font-display text-[clamp(2.4rem,5vw,4rem)] leading-[1.1] pb-[0.15em] font-bold tracking-tight"
             >
               {name}
             </h1>
