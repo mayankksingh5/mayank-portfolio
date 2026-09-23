@@ -52,6 +52,7 @@ those values are bundled into the browser.
    1. `supabase/migrations/20260923000001_schema.sql` – tables, RLS
    2. `supabase/migrations/20260923000002_storage.sql` – `media` and `resumes` buckets
    3. `supabase/migrations/20260923000003_design_fields.sql` – stats, contact messages, design fields
+   4. `supabase/migrations/20260923000004_contact_phone.sql` – contact phone on the profile
 3. Optional: run `supabase/seed/initial_content.sql` once for starter content.
 4. **Authentication → Users → Add user**: create the admin account.
 5. Run `supabase/admin/grant_admin.sql` with that email to grant admin access.
