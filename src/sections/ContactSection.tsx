@@ -1,6 +1,6 @@
 import { useState, type FormEvent, type ReactNode } from 'react'
 import { externalLinkProps, primaryButton, secondaryButton } from '@/components/buttonStyles'
-import { CheckIcon, DownloadIcon, EmailIcon, SendIcon, SocialIcon } from '@/components/icons'
+import { CheckIcon, DownloadIcon, EmailIcon, PhoneIcon, SendIcon, SocialIcon } from '@/components/icons'
 import { useReveal } from '@/hooks/useReveal'
 import { displayUrl } from '@/lib/format'
 import { sendContactMessage } from '@/services/contact'
@@ -15,10 +15,12 @@ const inputClass =
 
 export function ContactSection({
   email,
+  phone,
   socialLinks,
   resumeUrl,
 }: {
   email: string | null
+  phone: string | null
   socialLinks: SocialLink[]
   resumeUrl: string | null
 }) {
@@ -27,13 +29,27 @@ export function ContactSection({
   const [errors, setErrors] = useState<Partial<Record<'name' | 'email' | 'message', string>>>({})
 
   const contactLinks = [
-    ...(email ? [{ key: 'email', label: 'Email', url: `mailto:${email}`, icon: <EmailIcon /> }] : []),
+    ...(email
+      ? [{ key: 'email', label: 'Email', url: `mailto:${email}`, display: email, icon: <EmailIcon /> }]
+      : []),
+    ...(phone
+      ? [
+          {
+            key: 'phone',
+            label: 'Phone',
+            url: `tel:${phone.replace(/[^+0-9]/g, '')}`,
+            display: phone,
+            icon: <PhoneIcon />,
+          },
+        ]
+      : []),
     ...socialLinks
       .filter((link) => link.platform !== 'email')
       .map((link) => ({
         key: link.id,
         label: link.label,
         url: link.url,
+        display: displayUrl(link.url),
         icon: <SocialIcon platform={link.platform} />,
       })),
   ]
@@ -123,7 +139,7 @@ export function ContactSection({
                       </span>
                       <span className="min-w-0">
                         <span className="block text-xs text-fg-subtle">{link.label}</span>
-                        <span className="block truncate text-sm text-fg">{displayUrl(link.url)}</span>
+                        <span className="block truncate text-sm text-fg">{link.display}</span>
                       </span>
                     </a>
                   </li>

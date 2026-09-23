@@ -4,7 +4,7 @@ import { PageHeader } from '@/admin/components/PageHeader'
 import { SectionSpinner } from '@/admin/components/Spinner'
 import { SingletonForm } from '@/admin/forms/SingletonForm'
 import type { FieldConfig } from '@/admin/forms/types'
-import { imagePath, optionalEmail, requiredText, tagList } from '@/admin/forms/validation'
+import { imagePath, optionalEmail, optionalText, requiredText, tagList } from '@/admin/forms/validation'
 import { useAsyncData } from '@/hooks/useAsyncData'
 import { fetchProfile, updateProfile } from '@/services/siteContent'
 
@@ -30,6 +30,15 @@ const fields: FieldConfig[] = [
     label: 'Contact email',
     type: 'email',
     hint: 'Shown in the contact section.',
+    half: true,
+  },
+  {
+    name: 'contact_phone',
+    label: 'Contact phone',
+    type: 'text',
+    placeholder: '+91 98765 43210',
+    hint: 'Optional. Shown in the contact section; tapping it starts a call.',
+    half: true,
   },
   {
     name: 'about',
@@ -57,6 +66,10 @@ const schema = z.object({
   location: z.string().trim().max(200, 'Location is too long'),
   headline: z.string().trim().max(200, 'Headline is too long'),
   contact_email: optionalEmail,
+  contact_phone: optionalText.refine(
+    (value) => !value || /^\+?[0-9][0-9 ()-]{6,19}$/.test(value),
+    'Enter a valid phone number, e.g. +91 98765 43210',
+  ),
   summary: z.string().trim().max(400, 'Keep the intro under 400 characters'),
   about: z.string().trim().max(5000, 'About is too long'),
   interests: tagList,
@@ -84,6 +97,7 @@ export default function ProfilePage() {
             interests: profile.data.interests,
             is_open_to_work: profile.data.is_open_to_work,
             contact_email: profile.data.contact_email ?? '',
+            contact_phone: profile.data.contact_phone ?? '',
             about: profile.data.about,
             avatar_path: profile.data.avatar_path,
           }}

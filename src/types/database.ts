@@ -20,6 +20,7 @@ export type Profile = Timestamps & {
   about: string
   location: string
   contact_email: string | null
+  contact_phone: string | null
   avatar_path: string | null
   summary: string
   is_open_to_work: boolean

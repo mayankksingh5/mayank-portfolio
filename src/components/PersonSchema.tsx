@@ -14,6 +14,7 @@ export function PersonSchema({ data, jobTitle }: { data: PortfolioData; jobTitle
     description: profile.summary || undefined,
     url: window.location.origin,
     email: profile.contact_email ? `mailto:${profile.contact_email}` : undefined,
+    telephone: profile.contact_phone ?? undefined,
     image: profile.avatar_path ? publicUrl('media', profile.avatar_path) : undefined,
     address: profile.location ? { '@type': 'PostalAddress', addressCountry: profile.location } : undefined,
     worksFor: current ? { '@type': 'Organization', name: current.company } : undefined,

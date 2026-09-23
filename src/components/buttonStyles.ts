@@ -13,5 +13,5 @@ export const smallSecondaryButton = `${base} border border-white/8 bg-white/5 px
 
 /** Props for links that open outside the site. */
 export function externalLinkProps(url: string) {
-  return url.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noopener noreferrer' }
+  return /^(mailto|tel):/.test(url) ? {} : { target: '_blank', rel: 'noopener noreferrer' }
 }

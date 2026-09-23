@@ -126,7 +126,7 @@ function Portfolio({ data }: { data: PortfolioData }) {
         <CertificationsSection certifications={data.certifications} />
         <AchievementsSection achievements={data.achievements} />
         <EducationSection education={education} />
-        <ContactSection email={profile.contact_email} socialLinks={data.socialLinks} resumeUrl={data.resumeUrl} />
+        <ContactSection email={profile.contact_email} phone={profile.contact_phone} socialLinks={data.socialLinks} resumeUrl={data.resumeUrl} />
       </main>
       <Footer
         name={shortName}

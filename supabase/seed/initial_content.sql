@@ -27,6 +27,7 @@ update public.profile set
 I enjoy building reliable systems, automating development workflows and working at the intersection of software engineering and DevOps.',
   location = 'India',
   contact_email = 'mayankksingh1999@gmail.com',
+  contact_phone = '+91 8004611618',
   is_open_to_work = true,
   interests = array['DevOps', 'Cloud Computing', 'Software Development', 'Automation']
 where id = 1;

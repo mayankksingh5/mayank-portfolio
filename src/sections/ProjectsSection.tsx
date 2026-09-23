@@ -1,5 +1,6 @@
 import { smallPrimaryButton, smallSecondaryButton } from '@/components/buttonStyles'
 import { ExternalLinkIcon, GithubIcon } from '@/components/icons'
+import { ProjectPreview } from '@/components/ProjectPreview'
 import { RevealSection } from '@/components/RevealSection'
 import { SectionHeading } from '@/components/SectionHeading'
 import { TagList } from '@/components/Tag'
@@ -70,7 +71,7 @@ function FeaturedProject({ project, index }: { project: ProjectWithTechnologies;
   const domain = hostname(project.live_url) ?? `${project.slug}`
 
   return (
-    <article className="glass overflow-hidden rounded-2xl border-brand/20! transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+    <article className="glass group overflow-hidden rounded-2xl border-brand/20! transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
       <div className="grid lg:grid-cols-2">
         {/* Browser mockup */}
         <div className="flex min-h-64 flex-col border-white/6 bg-white/3 lg:border-r">
@@ -91,16 +92,7 @@ function FeaturedProject({ project, index }: { project: ProjectWithTechnologies;
               className="aspect-video w-full flex-1 object-cover object-top"
             />
           ) : (
-            <div aria-hidden="true" className="flex flex-1 items-center justify-center p-8">
-              <div className="text-center">
-                <div className="text-gradient-brand mb-4 font-display text-4xl font-bold">{project.title}</div>
-                <div className="grid grid-cols-3 gap-2">
-                  {[0.05, 0.07, 0.09, 0.11, 0.13, 0.15].map((alpha) => (
-                    <div key={alpha} className="h-8 w-16 rounded" style={{ background: `rgb(59 130 246 / ${alpha})` }} />
-                  ))}
-                </div>
-              </div>
-            </div>
+            <ProjectPreview title={project.title} />
           )}
         </div>
 
