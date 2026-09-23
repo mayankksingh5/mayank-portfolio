@@ -21,6 +21,9 @@ export type Profile = Timestamps & {
   location: string
   contact_email: string | null
   avatar_path: string | null
+  summary: string
+  is_open_to_work: boolean
+  interests: string[]
 }
 
 export type SiteSettings = Timestamps & {
@@ -46,6 +49,7 @@ export type Experience = Timestamps &
     end_date: string | null
     is_current: boolean
     description: string
+    technologies: string[]
   }
 
 export type Project = Timestamps &
@@ -110,6 +114,7 @@ export type Certification = Timestamps &
     credential_id: string | null
     credential_url: string | null
     image_path: string | null
+    icon: string | null
   }
 
 export type Achievement = Timestamps &
@@ -120,6 +125,7 @@ export type Achievement = Timestamps &
     achieved_on: string | null
     url: string | null
     image_path: string | null
+    icon: string | null
   }
 
 export const SOCIAL_PLATFORMS = [
@@ -141,6 +147,23 @@ export type SocialLink = Timestamps &
     label: string
     url: string
   }
+
+export type Stat = Timestamps &
+  Ordered & {
+    id: string
+    value: string
+    unit: string | null
+    label: string
+  }
+
+export type ContactMessage = {
+  id: string
+  name: string
+  email: string
+  message: string
+  is_read: boolean
+  created_at: string
+}
 
 type Relationship = {
   foreignKeyName: string
@@ -204,6 +227,8 @@ export type Database = {
       certifications: Table<Certification, 'name' | 'issuer'>
       achievements: Table<Achievement, 'title'>
       social_links: Table<SocialLink, 'platform' | 'label' | 'url'>
+      stats: Table<Stat, 'value' | 'label'>
+      contact_messages: Table<ContactMessage, 'name' | 'email' | 'message'>
     }
     Views: { [_ in never]: never }
     Functions: {

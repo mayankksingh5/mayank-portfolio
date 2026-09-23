@@ -14,11 +14,27 @@ export function formatDateRange(
   start: string | null | undefined,
   end: string | null | undefined,
   isCurrent = false,
+  separator = ' – ',
 ) {
   const from = formatMonthYear(start)
   const to = isCurrent ? 'Present' : formatMonthYear(end)
-  if (from && to) return `${from} – ${to}`
+  if (from && to) return `${from}${separator}${to}`
   return from || to
+}
+
+export function formatYearRange(start: string | null | undefined, end: string | null | undefined) {
+  const from = start?.slice(0, 4) ?? ''
+  const to = end?.slice(0, 4) ?? ''
+  if (from && to) return from === to ? from : `${from} — ${to}`
+  return from || to
+}
+
+/** "https://www.example.com/path" -> "example.com/path" (for display). */
+export function displayUrl(url: string) {
+  return url
+    .replace(/^mailto:/i, '')
+    .replace(/^https?:\/\/(www\.)?/i, '')
+    .replace(/\/$/, '')
 }
 
 export function formatFileSize(bytes: number) {

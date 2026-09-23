@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase'
+import { countUnreadMessages } from '@/services/messages'
 
 const COUNTED_TABLES = [
   'experiences',
@@ -8,6 +9,7 @@ const COUNTED_TABLES = [
   'certifications',
   'achievements',
   'social_links',
+  'stats',
 ] as const
 
 export type CountedTable = (typeof COUNTED_TABLES)[number]
@@ -16,6 +18,7 @@ export type DashboardSummary = {
   counts: Record<CountedTable, number>
   resumeFileName: string | null
   resumeUpdatedAt: string | null
+  unreadMessages: number
 }
 
 async function countRows(table: CountedTable) {
@@ -25,9 +28,10 @@ async function countRows(table: CountedTable) {
 }
 
 export async function fetchDashboardSummary(): Promise<DashboardSummary> {
-  const [counts, settings] = await Promise.all([
+  const [counts, settings, unreadMessages] = await Promise.all([
     Promise.all(COUNTED_TABLES.map(countRows)),
     supabase.from('site_settings').select('resume_file_name, resume_updated_at').eq('id', 1).single(),
+    countUnreadMessages(),
   ])
   if (settings.error) throw settings.error
 
@@ -35,5 +39,6 @@ export async function fetchDashboardSummary(): Promise<DashboardSummary> {
     counts: Object.fromEntries(counts) as Record<CountedTable, number>,
     resumeFileName: settings.data.resume_file_name,
     resumeUpdatedAt: settings.data.resume_updated_at,
+    unreadMessages,
   }
 }

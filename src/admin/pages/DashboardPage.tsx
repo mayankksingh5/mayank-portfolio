@@ -15,6 +15,7 @@ const COUNT_CARDS: { table: CountedTable; label: string; path: string }[] = [
   { table: 'certifications', label: 'Certifications', path: 'certifications' },
   { table: 'achievements', label: 'Achievements', path: 'achievements' },
   { table: 'social_links', label: 'Social Links', path: 'social-links' },
+  { table: 'stats', label: 'Stats', path: 'stats' },
 ]
 
 export default function DashboardPage() {
@@ -39,6 +40,15 @@ export default function DashboardPage() {
 
       {summary.status === 'success' && (
         <div className="flex flex-col gap-6">
+          {summary.data.unreadMessages > 0 && (
+            <Link
+              to={adminHref('messages')}
+              className="rounded-lg border border-slate-900 bg-white p-4 text-sm font-medium text-slate-900 hover:bg-slate-50"
+            >
+              You have {summary.data.unreadMessages} unread message
+              {summary.data.unreadMessages === 1 ? '' : 's'} →
+            </Link>
+          )}
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {COUNT_CARDS.map((card) => (
               <li key={card.table}>

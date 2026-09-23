@@ -10,6 +10,7 @@ import {
   optionalUrl,
   requiredDate,
   requiredText,
+  tagList,
 } from '@/admin/forms/validation'
 import { formatDateRange } from '@/lib/format'
 import { createCollectionService } from '@/services/collection'
@@ -43,6 +44,12 @@ const config: CollectionConfig<Experience> = {
       rows: 6,
       hint: 'Put each responsibility or achievement on its own line.',
     },
+    {
+      name: 'technologies',
+      label: 'Technologies used',
+      type: 'tags',
+      hint: 'Press Enter after each one, e.g. AWS, Docker.',
+    },
     { name: 'logo_path', label: 'Company logo', type: 'image', folder: 'experience', aspect: 'square' },
     { name: 'is_published', label: 'Show on portfolio', type: 'checkbox' },
   ],
@@ -57,6 +64,7 @@ const config: CollectionConfig<Experience> = {
       is_current: z.boolean(),
       company_url: optionalUrl,
       description: longText,
+      technologies: tagList,
       logo_path: imagePath,
       is_published: z.boolean(),
     })
@@ -72,6 +80,7 @@ const config: CollectionConfig<Experience> = {
     is_current: false,
     company_url: '',
     description: '',
+    technologies: [],
     logo_path: null,
     is_published: true,
   },
@@ -85,6 +94,7 @@ const config: CollectionConfig<Experience> = {
     is_current: row.is_current,
     company_url: row.company_url ?? '',
     description: row.description,
+    technologies: row.technologies,
     logo_path: row.logo_path,
     is_published: row.is_published,
   }),

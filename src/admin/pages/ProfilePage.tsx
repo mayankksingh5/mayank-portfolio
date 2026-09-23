@@ -4,7 +4,7 @@ import { PageHeader } from '@/admin/components/PageHeader'
 import { SectionSpinner } from '@/admin/components/Spinner'
 import { SingletonForm } from '@/admin/forms/SingletonForm'
 import type { FieldConfig } from '@/admin/forms/types'
-import { imagePath, optionalEmail, requiredText } from '@/admin/forms/validation'
+import { imagePath, optionalEmail, requiredText, tagList } from '@/admin/forms/validation'
 import { useAsyncData } from '@/hooks/useAsyncData'
 import { fetchProfile, updateProfile } from '@/services/siteContent'
 
@@ -15,8 +15,15 @@ const fields: FieldConfig[] = [
     name: 'headline',
     label: 'Headline',
     type: 'text',
-    placeholder: 'e.g. Full-Stack Developer | React & Node.js',
-    hint: 'Shown under your name at the top of the portfolio.',
+    placeholder: 'e.g. DevOps Engineer | Software Developer',
+    hint: 'Separate roles with | and they will rotate under your name.',
+  },
+  {
+    name: 'summary',
+    label: 'Short intro',
+    type: 'textarea',
+    rows: 2,
+    hint: 'One or two sentences shown at the top of the page.',
   },
   {
     name: 'contact_email',
@@ -31,7 +38,18 @@ const fields: FieldConfig[] = [
     rows: 8,
     hint: 'A few short paragraphs about you. Leave a blank line between paragraphs.',
   },
+  {
+    name: 'interests',
+    label: 'Interests',
+    type: 'tags',
+    hint: 'Shown in the About section. Press Enter after each one.',
+  },
   { name: 'avatar_path', label: 'Profile photo', type: 'image', folder: 'profile', aspect: 'square' },
+  {
+    name: 'is_open_to_work',
+    label: 'Show "Open to Opportunities" badge',
+    type: 'checkbox',
+  },
 ]
 
 const schema = z.object({
@@ -39,8 +57,11 @@ const schema = z.object({
   location: z.string().trim().max(200, 'Location is too long'),
   headline: z.string().trim().max(200, 'Headline is too long'),
   contact_email: optionalEmail,
+  summary: z.string().trim().max(400, 'Keep the intro under 400 characters'),
   about: z.string().trim().max(5000, 'About is too long'),
+  interests: tagList,
   avatar_path: imagePath,
+  is_open_to_work: z.boolean(),
 })
 
 export default function ProfilePage() {
@@ -59,6 +80,9 @@ export default function ProfilePage() {
             full_name: profile.data.full_name,
             location: profile.data.location,
             headline: profile.data.headline,
+            summary: profile.data.summary,
+            interests: profile.data.interests,
+            is_open_to_work: profile.data.is_open_to_work,
             contact_email: profile.data.contact_email ?? '',
             about: profile.data.about,
             avatar_path: profile.data.avatar_path,

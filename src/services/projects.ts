@@ -6,11 +6,14 @@ export type ProjectWithTechnologies = Project & { technologies: string[] }
 
 const base = createCollectionService<Project>('projects', { imageColumns: ['thumbnail_path'] })
 
-type ProjectQueryRow = Project & {
+/** Select that embeds each project's technology names in order. */
+export const PROJECT_WITH_TECHNOLOGIES_SELECT = '*, project_technologies(display_order, technologies(name))'
+
+export type ProjectQueryRow = Project & {
   project_technologies: { display_order: number; technologies: { name: string } | null }[]
 }
 
-function withTechnologyNames(row: ProjectQueryRow): ProjectWithTechnologies {
+export function withTechnologyNames(row: ProjectQueryRow): ProjectWithTechnologies {
   const { project_technologies, ...project } = row
   return {
     ...project,
@@ -76,7 +79,7 @@ export const projectsService: CollectionService<ProjectWithTechnologies> = {
   async list() {
     const { data, error } = await supabase
       .from('projects')
-      .select('*, project_technologies(display_order, technologies(name))')
+      .select(PROJECT_WITH_TECHNOLOGIES_SELECT)
       .order('display_order')
       .order('created_at')
     if (error) throw error

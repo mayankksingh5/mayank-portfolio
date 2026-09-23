@@ -24,6 +24,7 @@ type OrderedTable =
   | 'certifications'
   | 'achievements'
   | 'social_links'
+  | 'stats'
 
 // The typed client can't narrow a union of table names, so queries built from
 // a table variable go through this untyped view. Row types are enforced by the
