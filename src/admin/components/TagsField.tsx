@@ -23,13 +23,16 @@ export function TagsField({
   const id = useId()
   const [draft, setDraft] = useState('')
 
+  // Splits on commas too, so pasted "React, TypeScript" becomes two tags.
   function addTag(raw: string) {
-    const tag = raw.trim().replace(/,$/, '').trim()
-    if (!tag) return
-    const exists = value.some((existing) => existing.toLowerCase() === tag.toLowerCase())
-    // Reuse the existing spelling of a known technology (e.g. "React" not "react").
-    const canonical = suggestions.find((s) => s.toLowerCase() === tag.toLowerCase()) ?? tag
-    if (!exists) onChange([...value, canonical])
+    const next = [...value]
+    for (const part of raw.split(',')) {
+      const tag = part.trim()
+      if (!tag || next.some((existing) => existing.toLowerCase() === tag.toLowerCase())) continue
+      // Reuse the existing spelling of a known technology (e.g. "React" not "react").
+      next.push(suggestions.find((s) => s.toLowerCase() === tag.toLowerCase()) ?? tag)
+    }
+    if (next.length > value.length) onChange(next)
     setDraft('')
   }
 
