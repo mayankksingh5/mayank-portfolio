@@ -1,4 +1,5 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { ErrorScreen, LoadingScreen } from '@/components/PageStatus'
 import { PersonSchema } from '@/components/PersonSchema'
 import { useActiveSection } from '@/hooks/useActiveSection'
 import { useAsyncData } from '@/hooks/useAsyncData'
@@ -25,8 +26,8 @@ export default function HomePage() {
 
   return (
     <div className="site">
-      {portfolio.status === 'loading' && <LoadingScreen />}
-      {portfolio.status === 'error' && <ErrorScreen onRetry={portfolio.reload} />}
+      {portfolio.status === 'loading' && <LoadingScreen label="Loading portfolio…" />}
+      {portfolio.status === 'error' && <ErrorScreen what="portfolio" onRetry={portfolio.reload} />}
       {portfolio.status === 'success' && <Portfolio data={portfolio.data} />}
     </div>
   )
@@ -68,6 +69,13 @@ function Portfolio({ data }: { data: PortfolioData }) {
   }, [experiences.length, projects.length, skillGroups.length, education.length, data.resumeUrl])
 
   const activeId = useActiveSection(navLinks.map((link) => link.id))
+
+  // Sections render after data loads, so jump to a #hash (e.g. from an
+  // Engineering View's "Back to Project" link) once they exist.
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1))
+    if (id) document.getElementById(id)?.scrollIntoView()
+  }, [])
 
   useDocumentMeta({
     title: settings.site_title || profile.full_name,
@@ -146,35 +154,5 @@ function Portfolio({ data }: { data: PortfolioData }) {
         socialLinks={data.socialLinks}
       />
     </>
-  )
-}
-
-function LoadingScreen() {
-  return (
-    <div role="status" className="relative z-10 flex min-h-dvh flex-col items-center justify-center gap-4">
-      <span
-        aria-hidden="true"
-        className="size-10 animate-spin rounded-full border-2 border-brand/30 border-t-brand"
-      />
-      <span className="font-mono text-xs text-fg-subtle">Loading portfolio…</span>
-    </div>
-  )
-}
-
-function ErrorScreen({ onRetry }: { onRetry: () => void }) {
-  return (
-    <main className="relative z-10 flex min-h-dvh flex-col items-center justify-center gap-4 px-6 text-center">
-      <h1 className="font-display text-2xl font-bold text-fg">Something went wrong</h1>
-      <p className="max-w-sm text-sm text-fg-muted">
-        The portfolio could not be loaded. Please check your connection and try again.
-      </p>
-      <button
-        type="button"
-        onClick={onRetry}
-        className="rounded-lg border border-white/12 bg-white/6 px-5 py-2.5 text-sm font-medium text-fg hover:bg-white/10"
-      >
-        Try again
-      </button>
-    </main>
   )
 }

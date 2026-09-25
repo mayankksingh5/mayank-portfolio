@@ -1,9 +1,11 @@
+import { Link } from 'react-router'
 import { smallPrimaryButton, smallSecondaryButton } from '@/components/buttonStyles'
 import { ExternalLinkIcon, GithubIcon } from '@/components/icons'
 import { ProjectPreview } from '@/components/ProjectPreview'
 import { RevealSection } from '@/components/RevealSection'
 import { SectionHeading } from '@/components/SectionHeading'
 import { TagList } from '@/components/Tag'
+import { engineeringPath, hasEngineeringView } from '@/engineering/registry'
 import type { ProjectWithTechnologies } from '@/services/projectShape'
 import { publicUrl } from '@/lib/storageUrl'
 
@@ -19,9 +21,10 @@ function hostname(url: string | null) {
 }
 
 function ProjectLinks({ project, compact = false }: { project: ProjectWithTechnologies; compact?: boolean }) {
-  if (!project.live_url && !project.github_url) return null
+  const engineering = hasEngineeringView(project.slug)
+  if (!project.live_url && !project.github_url && !engineering) return null
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="flex flex-wrap items-center gap-3">
       {project.live_url && (
         <a href={project.live_url} target="_blank" rel="noopener noreferrer" className={smallPrimaryButton}>
           <ExternalLinkIcon />
@@ -35,6 +38,15 @@ function ProjectLinks({ project, compact = false }: { project: ProjectWithTechno
           GitHub
           <span className="sr-only">: {project.title}</span>
         </a>
+      )}
+      {engineering && (
+        <Link
+          to={engineeringPath(project.slug)}
+          className="px-1 py-2 text-sm text-fg-muted transition-colors hover:text-brand-alt"
+        >
+          View Engineering Details <span aria-hidden="true">→</span>
+          <span className="sr-only">: {project.title}</span>
+        </Link>
       )}
     </div>
   )
@@ -108,7 +120,10 @@ function FeaturedProject({ project, index }: { project: ProjectWithTechnologies;
   const mockupClass = 'flex min-h-64 flex-col border-white/6 bg-white/3 lg:border-r'
 
   return (
-    <article className="glass group overflow-hidden rounded-2xl border-brand/20! transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+    <article
+      id={`project-${project.slug}`}
+      className="glass group scroll-mt-24 overflow-hidden rounded-2xl border-brand/20! transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+    >
       <div className="grid lg:grid-cols-2">
         {/* Browser mockup; opens the live site when a URL is set */}
         {project.live_url ? (
@@ -151,7 +166,10 @@ function FeaturedProject({ project, index }: { project: ProjectWithTechnologies;
 
 function ProjectCard({ project, index }: { project: ProjectWithTechnologies; index: number }) {
   return (
-    <article className="glass rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1">
+    <article
+      id={`project-${project.slug}`}
+      className="glass scroll-mt-24 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1"
+    >
       <div className="grid gap-8 sm:grid-cols-3">
         <div className="flex min-h-40 items-center justify-center overflow-hidden rounded-xl border border-brand-alt/20 bg-linear-to-br from-brand-alt/15 to-brand/5">
           {project.thumbnail_path ? (

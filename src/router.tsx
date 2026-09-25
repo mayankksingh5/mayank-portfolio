@@ -3,7 +3,8 @@ import { createBrowserRouter } from 'react-router'
 import HomePage from '@/pages/HomePage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
-// Admin code is split into lazy chunks so public visitors never download it.
+// Admin code and the Engineering View are split into lazy chunks so home page
+// visitors never download them.
 const lazyPage = (load: () => Promise<{ default: ComponentType }>) => async () => ({
   Component: (await load()).default,
 })
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: HomePage,
+  },
+  {
+    path: '/projects/:slug/engineering',
+    lazy: lazyPage(() => import('@/pages/EngineeringPage')),
   },
   {
     path: '/admin',

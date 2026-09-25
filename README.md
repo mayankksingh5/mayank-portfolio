@@ -72,6 +72,7 @@ those values are bundled into the browser.
 src/
   admin/       Admin panel (lazy-loaded): auth, layout, forms, pages
   components/  Shared public UI (icons, headings, tags, buttons)
+  engineering/ Engineering View: data model, per-project data, components
   sections/    Public page sections (Hero, Experience, Projects, ...)
   pages/       Route-level pages
   hooks/       React hooks
@@ -86,6 +87,25 @@ supabase/
 seo-plugin.ts  Build-time robots.txt, sitemap.xml and canonical/OG tags
 wrangler.jsonc Cloudflare deployment config
 ```
+
+## Engineering View
+
+Projects can have a technical case study at `/projects/<slug>/engineering`
+(architecture, stack, data model, data flow, challenges, performance,
+security, deployment, timeline). A "View Engineering Details" link appears on
+the project card only when a view is enabled.
+
+To add one for a project:
+
+1. Create `src/engineering/projects/<slug>.ts` exporting a `ProjectEngineering`
+   object (see `src/engineering/types.ts`). Every section is optional and is
+   hidden when empty; only add information you can verify.
+2. Register it in `src/engineering/registry.ts` with `enabled: true`.
+3. The slug must match a **published** project in Admin > Projects. The title,
+   live URL and GitHub URL come from that project.
+
+Never put secrets, private URLs, private repositories or unmeasured numbers in
+these files: they ship to the browser.
 
 ## Deployment (Cloudflare Workers, static assets)
 
