@@ -31,7 +31,7 @@ npm run dev                  # http://localhost:5173
 | --- | --- | --- |
 | `VITE_SUPABASE_URL` | yes | Project URL, e.g. `https://<ref>.supabase.co` (no `/rest/v1`) |
 | `VITE_SUPABASE_ANON_KEY` | yes | Publishable (or legacy anon) key |
-| `VITE_SITE_URL` | for production | Public site URL, e.g. `https://example.com`. Enables `sitemap.xml`, canonical URL and link-preview image tags |
+| `VITE_SITE_URL` | for production | Public site URL, e.g. `https://example.com`. Enables `sitemap.xml`, canonical URL and link-preview image tags. Set in the committed `.env.production`; a build variable overrides it |
 
 Never put the Supabase **secret / service-role** key in any `VITE_` variable:
 those values are bundled into the browser.
