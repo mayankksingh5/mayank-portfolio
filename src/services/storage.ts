@@ -1,6 +1,6 @@
 import { env } from '@/lib/env'
 import { compressImage, extensionForType } from '@/lib/image'
-import { publicUrl, type Bucket } from '@/lib/storageUrl'
+import { isSiteAsset, publicUrl, type Bucket } from '@/lib/storageUrl'
 import { supabase } from '@/lib/supabase'
 
 export { publicUrl, type Bucket }
@@ -75,7 +75,8 @@ export async function uploadImage(
 
 /** Best-effort cleanup; a leftover file is harmless, so errors are only logged. */
 export async function deleteFiles(bucket: Bucket, paths: (string | null | undefined)[]) {
-  const toDelete = paths.filter((path): path is string => Boolean(path))
+  // Site images (public/) are not in Storage, so they are never deleted from it.
+  const toDelete = paths.filter((path): path is string => Boolean(path) && !isSiteAsset(path as string))
   if (toDelete.length === 0) return
   const { error } = await supabase.storage.from(bucket).remove(toDelete)
   if (error) console.warn('Could not delete old files', error)

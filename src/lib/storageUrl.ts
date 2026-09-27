@@ -3,8 +3,14 @@ import type { SiteSettings } from '@/types/database'
 
 export type Bucket = 'media' | 'resumes'
 
+/** Paths starting with "/" are images shipped with the site (public/), not Storage files. */
+export function isSiteAsset(path: string) {
+  return path.startsWith('/')
+}
+
 /** Public URL of a file in a public Storage bucket (no client library needed). */
 export function publicUrl(bucket: Bucket, path: string) {
+  if (isSiteAsset(path)) return path
   const encodedPath = path.split('/').map(encodeURIComponent).join('/')
   return `${env.VITE_SUPABASE_URL}/storage/v1/object/public/${bucket}/${encodedPath}`
 }
