@@ -11,19 +11,6 @@ const engineering: ProjectEngineering = {
   summary:
     'GovTrack Jobs lists Indian government recruitments, admit cards, results, answer keys and exam dates, each linked to the official notice. A Node.js scraper runs on GitHub Actions every two hours, collects links from official recruitment sites, removes duplicates, rejects old notices and publishes the rest to Supabase. An Express API serves the data to a React app, and Vercel functions add page-specific titles, Open Graph tags and JSON-LD for search engines and link previews.',
 
-  team: {
-    summary:
-      'Built with raj5-10, who owns the repository, reviewed and merged the pull requests, and contributed scraper and API fixes. I wrote most of the code.',
-    myRole: [
-      'Built the first production release: scraper, Express API, public portal and admin panel',
-      'Applied the new Figma design with 13 sectors and date-based job status',
-      'Built rule-based auto-publishing, the Git-driven seed import and community Q&A',
-      'Built the editor review flow and manual job entry',
-      'Added the Markdown blog, server-rendered SEO and the live sitemap',
-      'Tuned the scraper workflow for Node 22 and the free GitHub Actions quota',
-    ],
-  },
-
   architecture: [
     {
       label: 'Client',
