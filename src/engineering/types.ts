@@ -93,12 +93,22 @@ export type Milestone = {
   date?: string
 }
 
+/** Credit for team projects, so visitors can see what the owner built. */
+export type TeamCredit = {
+  /** Who else built it and what they worked on. */
+  summary: string
+  /** What the portfolio owner built, verified from the commit history. */
+  myRole: string[]
+}
+
 export type ProjectEngineering = {
   status?: ProjectStatus
   /** One-line technical description under the project name. */
   tagline: string
   /** Short engineering overview paragraph. */
   summary: string
+  /** Leave out for solo projects. */
+  team?: TeamCredit
   architecture?: ArchitectureLayer[]
   techStack?: TechCategory[]
   database?: DatabaseOverview

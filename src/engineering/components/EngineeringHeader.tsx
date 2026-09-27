@@ -14,6 +14,7 @@ export function EngineeringHeader({
   title,
   tagline,
   status,
+  isTeamProject = false,
   liveUrl,
   githubUrl,
   projectHref,
@@ -21,6 +22,7 @@ export function EngineeringHeader({
   title: string
   tagline: string
   status?: ProjectStatus
+  isTeamProject?: boolean
   liveUrl: string | null
   githubUrl: string | null
   projectHref: string
@@ -36,6 +38,11 @@ export function EngineeringHeader({
             <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
             <span className="sr-only">Status: </span>
             {statusStyle.label}
+          </span>
+        )}
+        {isTeamProject && (
+          <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-xs text-fg-muted">
+            Team project
           </span>
         )}
       </div>

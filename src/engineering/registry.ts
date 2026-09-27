@@ -12,6 +12,9 @@ type EngineeringEntry = {
  */
 const entries = new Map<string, EngineeringEntry>([
   ['mayank-portfolio', { enabled: true, load: () => import('@/engineering/projects/mayank-portfolio') }],
+  ['capita1', { enabled: true, load: () => import('@/engineering/projects/capita1') }],
+  ['govtrack-jobs', { enabled: true, load: () => import('@/engineering/projects/govtrack-jobs') }],
+  ['work-vault', { enabled: true, load: () => import('@/engineering/projects/work-vault') }],
 ])
 
 export function hasEngineeringView(slug: string) {

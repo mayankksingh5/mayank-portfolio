@@ -11,6 +11,7 @@ import { EngineeringTimeline } from '@/engineering/components/EngineeringTimelin
 import { EngineeringSection, NoteGrid } from '@/engineering/components/layout'
 import { PerformanceOverview } from '@/engineering/components/PerformanceOverview'
 import { RepositoryCard } from '@/engineering/components/RepositoryCard'
+import { TeamCredit } from '@/engineering/components/TeamCredit'
 import { TechStack } from '@/engineering/components/TechStack'
 import { useAsyncData } from '@/hooks/useAsyncData'
 import { useDocumentMeta } from '@/hooks/useDocumentMeta'
@@ -144,6 +145,7 @@ function EngineeringView({ data }: { data: EngineeringPageData }) {
           title={project.title}
           tagline={e.tagline}
           status={e.status}
+          isTeamProject={Boolean(e.team)}
           liveUrl={project.live_url}
           githubUrl={project.github_url}
           projectHref={projectHref}
@@ -154,6 +156,7 @@ function EngineeringView({ data }: { data: EngineeringPageData }) {
             Engineering overview
           </h2>
           <p className="max-w-4xl text-base leading-relaxed text-fg">{e.summary}</p>
+          {e.team && <TeamCredit team={e.team} />}
           {sections.length > 1 && (
             <nav aria-label="On this page" className="mt-6 border-t border-white/6 pt-5">
               <ul className="flex flex-wrap gap-2">
