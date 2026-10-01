@@ -165,7 +165,7 @@ export function Hero({
                 View My Work
               </a>
               {resumeUrl && (
-                <a href={resumeUrl} className={secondaryButton}>
+                <a href={resumeUrl} download className={secondaryButton}>
                   <DownloadIcon />
                   Download Resume
                 </a>

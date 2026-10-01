@@ -23,6 +23,8 @@ export function resumeViewUrl(settings: Pick<SiteSettings, 'resume_path'>) {
 /** Public URL that downloads the resume with its original file name. */
 export function resumeDownloadUrl(settings: Pick<SiteSettings, 'resume_path' | 'resume_file_name'>) {
   if (!settings.resume_path) return null
+  // A resume shipped with the site has no Storage download parameter.
+  if (isSiteAsset(settings.resume_path)) return settings.resume_path
   const url = new URL(publicUrl('resumes', settings.resume_path))
   url.searchParams.set('download', settings.resume_file_name ?? 'resume.pdf')
   return url.toString()

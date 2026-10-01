@@ -85,7 +85,7 @@ export function Navbar({
             </a>
           ))}
           {resumeUrl && (
-            <a href={resumeUrl} className={smallPrimaryButton}>
+            <a href={resumeUrl} download className={smallPrimaryButton}>
               <DownloadIcon />
               Resume
             </a>
@@ -136,7 +136,7 @@ export function Navbar({
             </div>
           )}
           {resumeUrl && (
-            <a href={resumeUrl} className={`${smallPrimaryButton} mt-2 w-full`}>
+            <a href={resumeUrl} download className={`${smallPrimaryButton} mt-2 w-full`}>
               <DownloadIcon />
               Download Resume
             </a>

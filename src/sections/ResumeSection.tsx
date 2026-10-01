@@ -78,7 +78,7 @@ export function ResumeSection({
               </ul>
             )}
             <div className="mt-6 flex flex-wrap justify-center gap-3 sm:justify-start">
-              <a href={downloadUrl} className={primaryButton}>
+              <a href={downloadUrl} download className={primaryButton}>
                 <DownloadIcon /> Download Resume
               </a>
               <a href={viewUrl} target="_blank" rel="noopener noreferrer" className={secondaryButton}>
